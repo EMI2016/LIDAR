@@ -176,7 +176,7 @@ if __name__ == '__main__':
             print(str(e))
         
        
-        cv2.imshow("img",img)
+        #cv2.imshow("img",img)
         if k==27:
             break
     laser.laser_off()
