@@ -18,7 +18,8 @@ m=0
 uart_port = '/dev/ttyACM0'
 uart_speed = 19200
 
-def valores(angle,x,y):
+def valores(angle):
+    
     if (angle==45):
         x2=x/2
         y2=y
@@ -35,15 +36,19 @@ def valores(angle,x,y):
         x2=-x/2
         y2=0
     print 'coor',x2,y2 
-    dist=((x2)**2+(y2)**2)**0.5
-    return dist
+    dist=((x2)**2
 
 def escalar (x1,y1,x2,y2,img,c,d):
-    
+    #t 'k',c
     a=((x1+x2)/2)
     b=((y1+y2)/2)
-    dista=(((a-500)**2+(b-1000)**2)**0.5)*3
-    pend=np.atan((y2-y1)/(x2-x1))
+    #dista=(((a-500)**2+(b-1000)**2)**0.5)*3
+   # d1=dista-0.12*1000.0/3.0
+    #a1=a*d1/dista
+    #b1=b*d1/dista
+    #print a1
+    #print b1
+     
     if a<500:
         es=(a-500)
     else: 
@@ -51,9 +56,9 @@ def escalar (x1,y1,x2,y2,img,c,d):
     er=(1000-b)
     c.append(es)
     d.append(er)
+    #print 'dist',dista
     cv2.line(img,(a,b),(500,1000),(75,50,100),8)
     cv2.line(img,(x1,y1),(x2,y2),(50,70,50),5)
-    return pend
 
 def esquelet (image):
 
@@ -134,36 +139,51 @@ def analisis_vaca(q,w,l,m):
         
     [skel,img] = esquelet (image)
 
-
+    #lines = cv2.HoughLinesP(skel,9,np.pi/180,2, None,35*1000/3000,100*1000/3000)
+    #lines = cv2.HoughLinesP(skel,9,np.pi/180,2, None,300*1000/3000,700*1000/3000)
+    #lines = cv2.HoughLinesP(skel,9,np.pi/180,2, None,50*1000/3000,700*1000/3000)
     lines = cv2.HoughLinesP(skel,2,np.pi/180,50, None,55,70)
 
     try:
-        i=0    
+#        i=0    
         for x1,y1,x2,y2 in lines[0]:
          
                
             r=np.sqrt((x1-x2)**2+(y1-y2)**2)
-            
+    
             if (r>400*1000/3000 and r<=550*1000/3000):
-            (x1,y1,x2,y2,img,c,d)
-             
-
-                if (abs(c[i+1])>abs(c[i]+58*1/3)) or (abs(c[i+1])<abs(c[i]-58*1/3)) or (abs(d[i+1])>abs(d[i]+26*1/3)) or (abs(d[i+1])<abs(d[i]-26*1/3)):
-                    i=i+1
-                    l=format((c[i+1]*3/1000.0),'.2f')
-                    m=format((d[i+1]*3/1000.0),'.2f')
-	
-        q1=format((c[0]*3/1000.0),'.2f')  
-        w1=format((d[0]*3/1000.0),'.2f')
-        q=q1+0.25*np.cos(p)
-        w=w1+0.25*np.sin(p) 
-     
+            #a=o
+            #if (r>55*3 and r<=70*3):    
+             #   a=a+1
+                #print 'h', x1
+                escalar (x1,y1,x2,y2,img,c,d)
+                #i=i+1
+     #           print 'e',x2
+                #if (c[i+1]>(c[i]+56.0*1.0/3.0)) or (c[i+1]<(c[i]-56.0*1.0/3.0)) or (d[i+1]>(d[i]+26.0*1.0/3.0)) or (d[i+1]<(d[i]-26.0*1.0/3.0)):
+                    #i=i+1
+                    #print 'i'
+                    #l=format((c[i+1]*3/1000.0),'.2f')
+                    #m=format((d[i+1]*3/1000.0),'.2f')
+                #if a>1:
+                    
+            #if (r>600*1000/3000): 
+             #   f=2
+              #  print 'dos',f                         
+                   
+        q=format((c[0]*3/1000.0),'.2f')  
+        w=format((d[0]*3/1000.0),'.2f') 
+        #q=q-0.25*np.cos(p)
+        #w=w-0.25*np.sin(p)
+        #l=format((c[15]/1000.0),'.2f')
+        #m=format((d[15]/1000.0),'.2f')
     except Exception as e:
         z=1
 
-    cv2.imshow("img",img)
+   # cv2.imshow("img",img)
     
-    return [q,w,k,l,m]             
+    return [q,w,k]             
+            
+        
             
 
 
