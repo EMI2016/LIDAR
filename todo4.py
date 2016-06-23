@@ -122,7 +122,7 @@ def analisis_patron(bandera):
 
 def analisis_vaca(q,w,l,m):
 
-    ret, frame = cap.read()
+    #ret, frame = cap.read()
     image=np.zeros((1000,1000))
     angles, distances, timestamp=laser.get_scan()
     angles=np.array(angles)
