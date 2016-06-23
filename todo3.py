@@ -6,10 +6,10 @@ import pickle
 from hokuyo.driver import hokuyo
 from hokuyo.tools import serial_port
 
-signal1_cascade = cv2.CascadeClassifier('signal1_cascade_v3.xml')
-signal2_cascade = cv2.CascadeClassifier('signal2_cascade.xml')
-signal3_cascade = cv2.CascadeClassifier('signal3_cascade2.xml')
-cap = cv2.VideoCapture(0)
+#signal1_cascade = cv2.CascadeClassifier('signal1_cascade_v3.xml')
+#signal2_cascade = cv2.CascadeClassifier('signal2_cascade.xml')
+#signal3_cascade = cv2.CascadeClassifier('signal3_cascade2.xml')
+#cap = cv2.VideoCapture(0)
 bandera=0
 q=0
 w=0
@@ -17,6 +17,11 @@ l=0
 m=0
 uart_port = '/dev/ttyACM0'
 uart_speed = 19200
+laser_serial = serial.Serial(port=uart_port, baudrate=uart_speed, timeout=0.5)
+port = serial_port.SerialPort(laser_serial)
+laser = hokuyo.Hokuyo(port)
+
+
 
 def valores(angle):
     
@@ -36,7 +41,7 @@ def valores(angle):
         x2=-x/2
         y2=0
     print 'coor',x2,y2 
-    dist=((x2)**2
+    #dist=((x2)**2
 
 def escalar (x1,y1,x2,y2,img,c,d):
     #t 'k',c
@@ -117,9 +122,9 @@ def analisis_patron(bandera):
         print "No detecto patron"
         bandera =1
 
-def analisis_vaca(q,w,l,m):
+def analisis_vaca(laser,q,w,l,m):
 
-    ret, frame = cap.read()
+    #ret, frame = cap.read()
     image=np.zeros((1000,1000))
     angles, distances, timestamp=laser.get_scan()
     angles=np.array(angles)
@@ -188,16 +193,14 @@ def analisis_vaca(q,w,l,m):
 
 
 
-def lidar():
+def lidar(laser):
     
-    laser_serial = serial.Serial(port=uart_port, baudrate=uart_speed, timeout=0.5)
-    port = serial_port.SerialPort(laser_serial)
-    laser = hokuyo.Hokuyo(port)
-    laser.laser_on()
+  
     c=[]
     d=[]       
+    laser.laser_on()
     analisis_patron(bandera)     
-    [a,b,k,e,f]=analisis_vaca(q,w,l,m)
+    [a,b,k,e,f]=analisis_vaca(laser,q,w,l,m)
     print 'Vaca1', [a,b]   
     print 'Vaca2', [e,f]     
     laser.laser_off()
